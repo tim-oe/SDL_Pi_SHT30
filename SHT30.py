@@ -30,7 +30,7 @@ class SHT30:
         i2c = smbus.SMBus(1)
         self.powerpin = powerpin
         # for Grove PowerSave
-        if (self.powerpin <> 0):
+        if (self.powerpin != 0):
             GPIO.setup(self.powerpin, GPIO.OUT)
             GPIO.output(self.powerpin, True)
             time.sleep(1.0)
@@ -49,7 +49,7 @@ class SHT30:
 
     def powerCycleSHT30(self):
         if (SHT30DEBUG == True):
-            print ("power cycling SHT30")
+            print (("power cycling SHT30"))
         GPIO.output(self.powerpin, False)
         time.sleep(10.50)
         GPIO.output(self.powerpin, True)
@@ -78,7 +78,7 @@ class SHT30:
         self._device.write_i2c_block_data(SHT30_I2CADDR,SHT30_READCOMMAND,[0x06])
         time.sleep(0.5)
         tmp = self._device.read_i2c_block_data(SHT30_I2CADDR,SHT30_READREG,6)
-        print "tmp=", tmp
+        print ("tmp=", tmp)
         TRaw = (((tmp[0] & 0x7F) << 8) | tmp[1]) 
         HRaw = ((tmp[3] << 8) | tmp[4]) 
         self.temperature = ((TRaw * 175) / 65535.0) - 45
@@ -95,16 +95,16 @@ class SHT30:
         crcHC = self.verify_crc(tH)
 
         if (SHT30DEBUG == True):
-            print "SHT30temperature=",self.temperature
-            print "SHT30humdity=",self.humidity
-            print "SHT30crcTR=",self.crcT
-            print "SHT30crcTC=",crcTC
-            print "SHT30crcHR=",self.crcH
-            print "SHT30crcHC=",crcHC
+            print ("SHT30temperature=",self.temperature)
+            print ("SHT30humdity=",self.humidity)
+            print ("SHT30crcTR=",self.crcT)
+            print ("SHT30crcTC=",crcTC)
+            print ("SHT30crcHR=",self.crcH)
+            print ("SHT30crcHC=",crcHC)
 
         if (self.crcT != crcTC) or (self.crcH != crcHC):
             if (SHT30DEBUG == True):
-                print "AM2314 BAD CRC"
+                print ("AM2314 BAD CRC")
             self.crc = -1
 
 
@@ -122,15 +122,15 @@ class SHT30:
                 TRaw = (((tmp[0] ) << 8) | tmp[1]) 
                 HRaw = ((tmp[3] << 8) | tmp[4]) 
                 if (SHT30DEBUG == True):
-                    print "TRaw = ", hex(TRaw)
-                    print "TRaw = ", (TRaw)
-                    print "tmp[0] = ", hex(tmp[0])
-                    print "tmp[1] = ", hex(tmp[1])
-                    print "tmp[0] = ", (tmp[0])
-                    print "tmp[1] = ", (tmp[1])
-                    print "tmp[0] & 0x7F", hex(tmp[0] & 0x7F)
-                    print "TRaw*175/65535.0 = ", TRaw*175.0/65535.0 
-                    print "TRaw*175/65535.0)-45 = ", (TRaw*175.0/65535.0 )-45
+                    print ("TRaw = ", hex(TRaw))
+                    print ("TRaw = ", (TRaw))
+                    print ("tmp[0] = ", hex(tmp[0]))
+                    print ("tmp[1] = ", hex(tmp[1]))
+                    print ("tmp[0] = ", (tmp[0]))
+                    print ("tmp[1] = ", (tmp[1]))
+                    print ("tmp[0] & 0x7F", hex(tmp[0] & 0x7F))
+                    print ("TRaw*175/65535.0 = ", TRaw*175.0/65535.0 )
+                    print ("TRaw*175/65535.0)-45 = ", (TRaw*175.0/65535.0 )-45)
 
                 self.temperature = ((TRaw * 175.0) / 65535.0) - 45
                 self.humidity = 100 * (HRaw) / 65535.0
@@ -142,18 +142,18 @@ class SHT30:
                         if (self.humidity <0.01 or self.humidity > 100.0):
                             # OK, humidity is bad.  Ignore
                             if (SHT30DEBUG == True):
-                                print ">>>>>>>>>>>>>"
-                                print "Bad SHT30 Humidity = ", self.temperature
-                                print ">>>>>>>>>>>>>"
+                                print (">>>>>>>>>>>>>")
+                                print ("Bad SHT30 Humidity = ", self.temperature)
+                                print (">>>>>>>>>>>>>")
                                 self.badreadings = self.badreadings+1
                                 tmp = None
                         else:
                             if (abs(self.temperature - self.SHT30PreviousTemp) > 10.0):
                                 # OK, temp is bad.  Ignore
                                 if (SHT30DEBUG == True):
-                                    print ">>>>>>>>>>>>>"
-                                    print "Bad SHT30 Humidity = ", self.temperature
-                                    print ">>>>>>>>>>>>>"
+                                    print (">>>>>>>>>>>>>")
+                                    print ("Bad SHT30 Humidity = ", self.temperature)
+                                    print (">>>>>>>>>>>>>")
                                     self.badreadings = self.badreadings+1
                                     tmp = None
                             else:
@@ -169,14 +169,14 @@ class SHT30:
                 if (SHT30DEBUG == True):
                     template = "An exception of type {0} occurred. Arguments:\n{1!r}"
                     message = template.format(type(ex).__name__, ex.args)
-                    print message
-                    print traceback.format_exc()
-                    print "SHT30readCount = ", count
+                    print (message)
+                    print (traceback.format_exc())
+                    print ("SHT30readCount = ", count)
             count += 1
             self.retrys += 1
             time.sleep(0.10)
             # only do three power cycle attempts
-            if (self.powerpin <> 0):
+            if (self.powerpin != 0):
                 if (count > MAXREADATTEMPT):
                     self.powerCycleSHT30()
                     if (powercyclecount <=2): 
@@ -201,16 +201,16 @@ class SHT30:
         crcHC = self.verify_crc(tH)
 
         if (SHT30DEBUG == True):
-            print "SHT30temperature=",self.temperature
-            print "SHT30humdity=",self.humidity
-            print "SHT30crcTR=",self.crcT
-            print "SHT30crcTC=",crcTC
-            print "SHT30crcHR=",self.crcH
-            print "SHT30crcHC=",crcHC
+            print ("SHT30temperature=",self.temperature)
+            print ("SHT30humdity=",self.humidity)
+            print ("SHT30crcTR=",self.crcT)
+            print ("SHT30crcTC=",crcTC)
+            print ("SHT30crcHR=",self.crcH)
+            print ("SHT30crcHC=",crcHC)
 
         if (self.crcT != crcTC) or (self.crcH != crcHC):
             if (SHT30DEBUG == True):
-                print "SHT30 BAD CRC"
+                print ("SHT30 BAD CRC")
             self.badcrcs = self.badcrcs + 1
             self.crc = -1
         else:
@@ -242,5 +242,3 @@ class SHT30:
 
     def read_status_info(self):
         return  (self.goodreads, self.badreadings, self.badcrcs, self.retrys,self.powercycles)
-
-    
